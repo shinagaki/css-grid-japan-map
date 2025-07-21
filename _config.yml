@@ -1,0 +1,54 @@
+title: CSS Grid シンプル日本地図
+description: CSS Gridを使って作る軽量でインタラクティブな日本都道府県マップ
+url: "https://shinagaki.github.io"
+baseurl: "/css-grid-japan-map"
+
+# Author information
+author:
+  name: shinagaki
+  email: shinagaki@gmail.com
+  url: https://creco.net
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude from processing
+exclude:
+  - node_modules/
+  - vendor/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+
+# Include files
+include:
+  - _pages
+
+# Collections
+collections:
+  samples:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "samples"
+    values:
+      layout: "default"

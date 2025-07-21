@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Grid シンプル日本地図 - 基本バージョン</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 20px;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            border-bottom: 2px solid #74b9ff;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #636e72;
+            margin: 40px 0 20px 0;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* CSS Grid シンプル日本地図  */
+        .css-grid-japan-map {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(4, 40px);
+            gap: 2px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .css-grid-japan-map .prefecture {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 1.2;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .css-grid-japan-map .prefecture:hover,
+        .css-grid-japan-map .prefecture:focus {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            filter: brightness(1.1);
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 2px;
+        }
+
+        /* CSS Grid シンプル日本地図 配置  */
+        .css-grid-japan-map .prefecture:nth-child(1) {
+            grid-column: 12/13;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(2) {
+            grid-column: 12/13;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(3) {
+            grid-column: 12/13;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(4) {
+            grid-column: 11/12;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(5) {
+            grid-column: 11/12;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(6) {
+            grid-column: 11/12;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(7) {
+            grid-column: 11/12;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(8) {
+            grid-column: 10/11;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(9) {
+            grid-column: 10/11;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(10) {
+            grid-column: 10/11;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(11) {
+            grid-column: 9/10;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(12) {
+            grid-column: 10/11;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(13) {
+            grid-column: 9/10;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(14) {
+            grid-column: 9/10;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(15) {
+            grid-column: 9/10;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(16) {
+            grid-column: 8/9;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(17) {
+            grid-column: 7/8;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(18) {
+            grid-column: 7/8;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(19) {
+            grid-column: 8/9;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(20) {
+            grid-column: 8/9;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(21) {
+            grid-column: 7/8;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(22) {
+            grid-column: 8/9;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(23) {
+            grid-column: 7/8;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(24) {
+            grid-column: 6/7;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(25) {
+            grid-column: 6/7;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(26) {
+            grid-column: 6/7;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(27) {
+            grid-column: 5/6;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(28) {
+            grid-column: 5/6;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(29) {
+            grid-column: 6/7;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(30) {
+            grid-column: 5/6;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(31) {
+            grid-column: 5/6;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(32) {
+            grid-column: 4/5;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(33) {
+            grid-column: 4/5;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(34) {
+            grid-column: 3/4;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(35) {
+            grid-column: 3/4;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(36) {
+            grid-column: 4/5;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(37) {
+            grid-column: 4/5;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(38) {
+            grid-column: 3/4;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(39) {
+            grid-column: 3/4;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(40) {
+            grid-column: 2/3;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(41) {
+            grid-column: 1/2;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(42) {
+            grid-column: 1/2;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(43) {
+            grid-column: 1/2;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(44) {
+            grid-column: 2/3;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(45) {
+            grid-column: 2/3;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(46) {
+            grid-column: 2/3;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(47) {
+            grid-column: 1/2;
+            grid-row: 4/5;
+        }
+
+        /* CSS Grid シンプル日本地図 地域別カラーリング */
+        .css-grid-japan-map .prefecture.hokkaido {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+        }
+
+        .css-grid-japan-map .prefecture.tohoku {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+        }
+
+        .css-grid-japan-map .prefecture.kanto {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+        }
+
+        .css-grid-japan-map .prefecture.chubu {
+            background: linear-gradient(135deg, #55a3ff, #2d3436);
+        }
+
+        .css-grid-japan-map .prefecture.kansai {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+        }
+
+        .css-grid-japan-map .prefecture.chugoku {
+            background: linear-gradient(135deg, #fab1a0, #e17055);
+        }
+
+        .css-grid-japan-map .prefecture.shikoku {
+            background: linear-gradient(135deg, #81ecec, #74b9ff);
+        }
+
+        .css-grid-japan-map .prefecture.kyushu {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        }
+
+        .css-grid-japan-map .prefecture.okinawa {
+            background: linear-gradient(135deg, #ff7675, #d63031);
+        }
+
+        /* CSS Grid シンプル日本地図 aタグ版のフォーカススタイル */
+        .css-grid-japan-map a.prefecture:focus {
+            outline: 3px solid #4A90E2;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CSS Grid シンプル日本地図 - 基本バージョン</h1>
+    <h2>単色版</h2>
+    <div class="css-grid-japan-map">
+        <div class="prefecture">北海道</div>
+        <div class="prefecture">青森</div>
+        <div class="prefecture">岩手</div>
+        <div class="prefecture">宮城</div>
+        <div class="prefecture">秋田</div>
+        <div class="prefecture">山形</div>
+        <div class="prefecture">福島</div>
+        <div class="prefecture">茨城</div>
+        <div class="prefecture">栃木</div>
+        <div class="prefecture">群馬</div>
+        <div class="prefecture">埼玉</div>
+        <div class="prefecture">千葉</div>
+        <div class="prefecture">東京</div>
+        <div class="prefecture">神奈川</div>
+        <div class="prefecture">新潟</div>
+        <div class="prefecture">富山</div>
+        <div class="prefecture">石川</div>
+        <div class="prefecture">福井</div>
+        <div class="prefecture">山梨</div>
+        <div class="prefecture">長野</div>
+        <div class="prefecture">岐阜</div>
+        <div class="prefecture">静岡</div>
+        <div class="prefecture">愛知</div>
+        <div class="prefecture">三重</div>
+        <div class="prefecture">滋賀</div>
+        <div class="prefecture">京都</div>
+        <div class="prefecture">大阪</div>
+        <div class="prefecture">兵庫</div>
+        <div class="prefecture">奈良</div>
+        <div class="prefecture">和歌山</div>
+        <div class="prefecture">鳥取</div>
+        <div class="prefecture">島根</div>
+        <div class="prefecture">岡山</div>
+        <div class="prefecture">広島</div>
+        <div class="prefecture">山口</div>
+        <div class="prefecture">徳島</div>
+        <div class="prefecture">香川</div>
+        <div class="prefecture">愛媛</div>
+        <div class="prefecture">高知</div>
+        <div class="prefecture">福岡</div>
+        <div class="prefecture">佐賀</div>
+        <div class="prefecture">長崎</div>
+        <div class="prefecture">熊本</div>
+        <div class="prefecture">大分</div>
+        <div class="prefecture">宮崎</div>
+        <div class="prefecture">鹿児島</div>
+        <div class="prefecture">沖縄</div>
+    </div>
+
+    <h2>地域別カラーリング版</h2>
+    <div class="css-grid-japan-map">
+        <div class="prefecture hokkaido">北海道</div>
+        <div class="prefecture tohoku">青森</div>
+        <div class="prefecture tohoku">岩手</div>
+        <div class="prefecture tohoku">宮城</div>
+        <div class="prefecture tohoku">秋田</div>
+        <div class="prefecture tohoku">山形</div>
+        <div class="prefecture tohoku">福島</div>
+        <div class="prefecture kanto">茨城</div>
+        <div class="prefecture kanto">栃木</div>
+        <div class="prefecture kanto">群馬</div>
+        <div class="prefecture kanto">埼玉</div>
+        <div class="prefecture kanto">千葉</div>
+        <div class="prefecture kanto">東京</div>
+        <div class="prefecture kanto">神奈川</div>
+        <div class="prefecture chubu">新潟</div>
+        <div class="prefecture chubu">富山</div>
+        <div class="prefecture chubu">石川</div>
+        <div class="prefecture chubu">福井</div>
+        <div class="prefecture chubu">山梨</div>
+        <div class="prefecture chubu">長野</div>
+        <div class="prefecture chubu">岐阜</div>
+        <div class="prefecture chubu">静岡</div>
+        <div class="prefecture chubu">愛知</div>
+        <div class="prefecture kansai">三重</div>
+        <div class="prefecture kansai">滋賀</div>
+        <div class="prefecture kansai">京都</div>
+        <div class="prefecture kansai">大阪</div>
+        <div class="prefecture kansai">兵庫</div>
+        <div class="prefecture kansai">奈良</div>
+        <div class="prefecture kansai">和歌山</div>
+        <div class="prefecture chugoku">鳥取</div>
+        <div class="prefecture chugoku">島根</div>
+        <div class="prefecture chugoku">岡山</div>
+        <div class="prefecture chugoku">広島</div>
+        <div class="prefecture chugoku">山口</div>
+        <div class="prefecture shikoku">徳島</div>
+        <div class="prefecture shikoku">香川</div>
+        <div class="prefecture shikoku">愛媛</div>
+        <div class="prefecture shikoku">高知</div>
+        <div class="prefecture kyushu">福岡</div>
+        <div class="prefecture kyushu">佐賀</div>
+        <div class="prefecture kyushu">長崎</div>
+        <div class="prefecture kyushu">熊本</div>
+        <div class="prefecture kyushu">大分</div>
+        <div class="prefecture kyushu">宮崎</div>
+        <div class="prefecture kyushu">鹿児島</div>
+        <div class="prefecture okinawa">沖縄</div>
+    </div>
+
+    <h2>aタグ版</h2>
+    <div class="css-grid-japan-map">
+        <a href="#hokkaido" class="prefecture hokkaido" tabindex="1">北海道</a>
+        <a href="#aomori" class="prefecture tohoku" tabindex="2">青森</a>
+        <a href="#iwate" class="prefecture tohoku" tabindex="3">岩手</a>
+        <a href="#miyagi" class="prefecture tohoku" tabindex="7">宮城</a>
+        <a href="#akita" class="prefecture tohoku" tabindex="4">秋田</a>
+        <a href="#yamagata" class="prefecture tohoku" tabindex="5">山形</a>
+        <a href="#fukushima" class="prefecture tohoku" tabindex="6">福島</a>
+        <a href="#ibaraki" class="prefecture kanto" tabindex="10">茨城</a>
+        <a href="#tochigi" class="prefecture kanto" tabindex="9">栃木</a>
+        <a href="#gunma" class="prefecture kanto" tabindex="8">群馬</a>
+        <a href="#saitama" class="prefecture kanto" tabindex="13">埼玉</a>
+        <a href="#chiba" class="prefecture kanto" tabindex="11">千葉</a>
+        <a href="#tokyo" class="prefecture kanto" tabindex="14">東京</a>
+        <a href="#kanagawa" class="prefecture kanto" tabindex="15">神奈川</a>
+        <a href="#niigata" class="prefecture chubu" tabindex="12">新潟</a>
+        <a href="#toyama" class="prefecture chubu" tabindex="16">富山</a>
+        <a href="#ishikawa" class="prefecture chubu" tabindex="20">石川</a>
+        <a href="#fukui" class="prefecture chubu" tabindex="21">福井</a>
+        <a href="#yamanashi" class="prefecture chubu" tabindex="18">山梨</a>
+        <a href="#nagano" class="prefecture chubu" tabindex="17">長野</a>
+        <a href="#gifu" class="prefecture chubu" tabindex="22">岐阜</a>
+        <a href="#shizuoka" class="prefecture chubu" tabindex="19">静岡</a>
+        <a href="#aichi" class="prefecture chubu" tabindex="23">愛知</a>
+        <a href="#mie" class="prefecture kansai" tabindex="27">三重</a>
+        <a href="#shiga" class="prefecture kansai" tabindex="25">滋賀</a>
+        <a href="#kyoto" class="prefecture kansai" tabindex="24">京都</a>
+        <a href="#osaka" class="prefecture kansai" tabindex="30">大阪</a>
+        <a href="#hyogo" class="prefecture kansai" tabindex="29">兵庫</a>
+        <a href="#nara" class="prefecture kansai" tabindex="26">奈良</a>
+        <a href="#wakayama" class="prefecture kansai" tabindex="31">和歌山</a>
+        <a href="#tottori" class="prefecture chugoku" tabindex="28">鳥取</a>
+        <a href="#shimane" class="prefecture chugoku" tabindex="32">島根</a>
+        <a href="#okayama" class="prefecture chugoku" tabindex="33">岡山</a>
+        <a href="#hiroshima" class="prefecture chugoku" tabindex="37">広島</a>
+        <a href="#yamaguchi" class="prefecture chugoku" tabindex="36">山口</a>
+        <a href="#tokushima" class="prefecture shikoku" tabindex="35">徳島</a>
+        <a href="#kagawa" class="prefecture shikoku" tabindex="34">香川</a>
+        <a href="#ehime" class="prefecture shikoku" tabindex="38">愛媛</a>
+        <a href="#kochi" class="prefecture shikoku" tabindex="39">高知</a>
+        <a href="#fukuoka" class="prefecture kyushu" tabindex="40">福岡</a>
+        <a href="#saga" class="prefecture kyushu" tabindex="45">佐賀</a>
+        <a href="#nagasaki" class="prefecture kyushu" tabindex="44">長崎</a>
+        <a href="#kumamoto" class="prefecture kyushu" tabindex="46">熊本</a>
+        <a href="#oita" class="prefecture kyushu" tabindex="41">大分</a>
+        <a href="#miyazaki" class="prefecture kyushu" tabindex="42">宮崎</a>
+        <a href="#kagoshima" class="prefecture kyushu" tabindex="43">鹿児島</a>
+        <a href="#okinawa" class="prefecture okinawa" tabindex="47">沖縄</a>
+    </div>
+</body>
+
+</html>

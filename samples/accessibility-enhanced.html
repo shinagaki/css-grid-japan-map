@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Grid シンプル日本地図 - アクセシビリティ対応バージョン</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 20px;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            border-bottom: 2px solid #74b9ff;
+            padding-bottom: 15px;
+        }
+
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* キーボードナビゲーション用のスキップリンク */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* 情報パネル */
+        .info-panel {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .info-panel h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .info-panel p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+        }
+
+
+        /* CSS Grid シンプル日本地図  */
+        .css-grid-japan-map {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(4, 40px);
+            gap: 2px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .css-grid-japan-map .prefecture {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 1.2;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ホバー効果 */
+        .css-grid-japan-map .prefecture:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            filter: brightness(1.1);
+        }
+
+        /* フォーカス時の視覚的フィードバック（アクセシビリティ重要） */
+        .css-grid-japan-map .prefecture:focus {
+            outline: 3px solid #4A90E2;
+            outline-offset: 2px;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        /* CSS Grid シンプル日本地図 地域別カラーリング */
+        .css-grid-japan-map .prefecture.hokkaido {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+        }
+
+        .css-grid-japan-map .prefecture.tohoku {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+        }
+
+        .css-grid-japan-map .prefecture.kanto {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+        }
+
+        .css-grid-japan-map .prefecture.chubu {
+            background: linear-gradient(135deg, #55a3ff, #2d3436);
+        }
+
+        .css-grid-japan-map .prefecture.kansai {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+        }
+
+        .css-grid-japan-map .prefecture.chugoku {
+            background: linear-gradient(135deg, #fab1a0, #e17055);
+        }
+
+        .css-grid-japan-map .prefecture.shikoku {
+            background: linear-gradient(135deg, #81ecec, #74b9ff);
+        }
+
+        .css-grid-japan-map .prefecture.kyushu {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        }
+
+        .css-grid-japan-map .prefecture.okinawa {
+            background: linear-gradient(135deg, #ff7675, #d63031);
+        }
+
+        /* 高コントラストモード対応 */
+        @media (prefers-contrast: high) {
+            .css-grid-japan-map .prefecture {
+                border: 2px solid #000 !important;
+                background: #fff !important;
+                color: #000 !important;
+                text-shadow: none;
+            }
+
+            .css-grid-japan-map .prefecture:focus {
+                outline: 4px solid #000;
+                background: #ffff00 !important;
+            }
+        }
+
+        /* アニメーション無効化対応 */
+        @media (prefers-reduced-motion: reduce) {
+            .css-grid-japan-map .prefecture {
+                transition: none;
+            }
+
+            .css-grid-japan-map .prefecture:hover,
+            .css-grid-japan-map .prefecture:focus {
+                transform: none;
+                filter: none;
+            }
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .css-grid-japan-map {
+                grid-template-rows: repeat(4, 35px);
+                padding: 10px;
+            }
+            
+            .css-grid-japan-map .prefecture {
+                font-size: 10px;
+            }
+            
+            .info-panel {
+                margin: 15px auto 0;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .css-grid-japan-map {
+                grid-template-rows: repeat(4, 30px);
+                gap: 1px;
+                padding: 8px;
+            }
+            
+            .css-grid-japan-map .prefecture {
+                font-size: 9px;
+            }
+            
+            .info-panel {
+                margin: 10px auto 0;
+                padding: 10px;
+                min-height: 50px;
+            }
+            
+            .description {
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* 選択状態の表示 */
+        .css-grid-japan-map .prefecture.selected {
+            outline: 4px solid #ff6b6b;
+            outline-offset: 0px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
+        }
+
+        /* CSS Grid シンプル日本地図 配置  */
+        .css-grid-japan-map .prefecture:nth-child(1) {
+            grid-column: 12/13;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(2) {
+            grid-column: 12/13;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(3) {
+            grid-column: 12/13;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(4) {
+            grid-column: 11/12;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(5) {
+            grid-column: 11/12;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(6) {
+            grid-column: 11/12;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(7) {
+            grid-column: 11/12;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(8) {
+            grid-column: 10/11;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(9) {
+            grid-column: 10/11;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(10) {
+            grid-column: 10/11;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(11) {
+            grid-column: 9/10;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(12) {
+            grid-column: 10/11;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(13) {
+            grid-column: 9/10;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(14) {
+            grid-column: 9/10;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(15) {
+            grid-column: 9/10;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(16) {
+            grid-column: 8/9;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(17) {
+            grid-column: 7/8;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(18) {
+            grid-column: 7/8;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(19) {
+            grid-column: 8/9;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(20) {
+            grid-column: 8/9;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(21) {
+            grid-column: 7/8;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(22) {
+            grid-column: 8/9;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(23) {
+            grid-column: 7/8;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(24) {
+            grid-column: 6/7;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(25) {
+            grid-column: 6/7;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(26) {
+            grid-column: 6/7;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(27) {
+            grid-column: 5/6;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(28) {
+            grid-column: 5/6;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(29) {
+            grid-column: 6/7;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(30) {
+            grid-column: 5/6;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(31) {
+            grid-column: 5/6;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(32) {
+            grid-column: 4/5;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(33) {
+            grid-column: 4/5;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(34) {
+            grid-column: 3/4;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(35) {
+            grid-column: 3/4;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(36) {
+            grid-column: 4/5;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(37) {
+            grid-column: 4/5;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(38) {
+            grid-column: 3/4;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(39) {
+            grid-column: 3/4;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(40) {
+            grid-column: 2/3;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(41) {
+            grid-column: 1/2;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(42) {
+            grid-column: 1/2;
+            grid-row: 1/2;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(43) {
+            grid-column: 1/2;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(44) {
+            grid-column: 2/3;
+            grid-row: 2/3;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(45) {
+            grid-column: 2/3;
+            grid-row: 3/4;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(46) {
+            grid-column: 2/3;
+            grid-row: 4/5;
+        }
+
+        .css-grid-japan-map .prefecture:nth-child(47) {
+            grid-column: 1/2;
+            grid-row: 4/5;
+        }
+
+        /* スクリーンリーダー用の説明テキスト */
+        .css-grid-japan-map .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">メインコンテンツにスキップ</a>
+
+    <h1>CSS Grid シンプル日本地図 - アクセシビリティ対応バージョン</h1>
+    <p class="description">
+        キーボードのTabキーで都道府県を選択できます。Enterキーで詳細を表示します。
+    </p>
+
+    <main id="main-content">
+        <div class="css-grid-japan-map" role="application" aria-label="日本都道府県マップ">
+            <a href="#hokkaido-info" class="prefecture hokkaido" role="button" aria-describedby="hokkaido-desc"
+                tabindex="1">
+                北海道
+                <span class="sr-only" id="hokkaido-desc">北海道地方、人口約520万人</span>
+            </a>
+            <a href="#aomori-info" class="prefecture tohoku" role="button" aria-describedby="aomori-desc" tabindex="2">
+                青森
+                <span class="sr-only" id="aomori-desc">東北地方、人口約123万人</span>
+            </a>
+            <a href="#iwate-info" class="prefecture tohoku" role="button" aria-describedby="iwate-desc" tabindex="3">
+                岩手
+                <span class="sr-only" id="iwate-desc">東北地方、人口約120万人</span>
+            </a>
+            <a href="#miyagi-info" class="prefecture tohoku" role="button" aria-describedby="miyagi-desc" tabindex="7">
+                宮城
+                <span class="sr-only" id="miyagi-desc">東北地方、人口約230万人</span>
+            </a>
+            <a href="#akita-info" class="prefecture tohoku" role="button" aria-describedby="akita-desc" tabindex="4">
+                秋田
+                <span class="sr-only" id="akita-desc">東北地方、人口約95万人</span>
+            </a>
+            <a href="#yamagata-info" class="prefecture tohoku" role="button" aria-describedby="yamagata-desc"
+                tabindex="5">
+                山形
+                <span class="sr-only" id="yamagata-desc">東北地方、人口約107万人</span>
+            </a>
+            <a href="#fukushima-info" class="prefecture tohoku" role="button" aria-describedby="fukushima-desc"
+                tabindex="6">
+                福島
+                <span class="sr-only" id="fukushima-desc">東北地方、人口約185万人</span>
+            </a>
+            <a href="#ibaraki-info" class="prefecture kanto" role="button" aria-describedby="ibaraki-desc"
+                tabindex="10">
+                茨城
+                <span class="sr-only" id="ibaraki-desc">関東地方、人口約287万人</span>
+            </a>
+            <a href="#tochigi-info" class="prefecture kanto" role="button" aria-describedby="tochigi-desc" tabindex="9">
+                栃木
+                <span class="sr-only" id="tochigi-desc">関東地方、人口約194万人</span>
+            </a>
+            <a href="#gunma-info" class="prefecture kanto" role="button" aria-describedby="gunma-desc" tabindex="8">
+                群馬
+                <span class="sr-only" id="gunma-desc">関東地方、人口約194万人</span>
+            </a>
+            <a href="#saitama-info" class="prefecture kanto" role="button" aria-describedby="saitama-desc"
+                tabindex="13">
+                埼玉
+                <span class="sr-only" id="saitama-desc">関東地方、人口約735万人</span>
+            </a>
+            <a href="#chiba-info" class="prefecture kanto" role="button" aria-describedby="chiba-desc" tabindex="11">
+                千葉
+                <span class="sr-only" id="chiba-desc">関東地方、人口約628万人</span>
+            </a>
+            <a href="#tokyo-info" class="prefecture kanto" role="button" aria-describedby="tokyo-desc" tabindex="14">
+                東京
+                <span class="sr-only" id="tokyo-desc">関東地方、人口約1400万人</span>
+            </a>
+            <a href="#kanagawa-info" class="prefecture kanto" role="button" aria-describedby="kanagawa-desc"
+                tabindex="15">
+                神奈川
+                <span class="sr-only" id="kanagawa-desc">関東地方、人口約920万人</span>
+            </a>
+            <a href="#niigata-info" class="prefecture chubu" role="button" aria-describedby="niigata-desc"
+                tabindex="12">
+                新潟
+                <span class="sr-only" id="niigata-desc">中部地方、人口約220万人</span>
+            </a>
+            <a href="#toyama-info" class="prefecture chubu" role="button" aria-describedby="toyama-desc" tabindex="16">
+                富山
+                <span class="sr-only" id="toyama-desc">中部地方、人口約104万人</span>
+            </a>
+            <a href="#ishikawa-info" class="prefecture chubu" role="button" aria-describedby="ishikawa-desc"
+                tabindex="20">
+                石川
+                <span class="sr-only" id="ishikawa-desc">中部地方、人口約113万人</span>
+            </a>
+            <a href="#fukui-info" class="prefecture chubu" role="button" aria-describedby="fukui-desc" tabindex="21">
+                福井
+                <span class="sr-only" id="fukui-desc">中部地方、人口約77万人</span>
+            </a>
+            <a href="#yamanashi-info" class="prefecture chubu" role="button" aria-describedby="yamanashi-desc"
+                tabindex="18">
+                山梨
+                <span class="sr-only" id="yamanashi-desc">中部地方、人口約81万人</span>
+            </a>
+            <a href="#nagano-info" class="prefecture chubu" role="button" aria-describedby="nagano-desc" tabindex="17">
+                長野
+                <span class="sr-only" id="nagano-desc">中部地方、人口約205万人</span>
+            </a>
+            <a href="#gifu-info" class="prefecture chubu" role="button" aria-describedby="gifu-desc" tabindex="22">
+                岐阜
+                <span class="sr-only" id="gifu-desc">中部地方、人口約198万人</span>
+            </a>
+            <a href="#shizuoka-info" class="prefecture chubu" role="button" aria-describedby="shizuoka-desc"
+                tabindex="19">
+                静岡
+                <span class="sr-only" id="shizuoka-desc">中部地方、人口約363万人</span>
+            </a>
+            <a href="#aichi-info" class="prefecture chubu" role="button" aria-describedby="aichi-desc" tabindex="23">
+                愛知
+                <span class="sr-only" id="aichi-desc">中部地方、人口約755万人</span>
+            </a>
+            <a href="#mie-info" class="prefecture kansai" role="button" aria-describedby="mie-desc" tabindex="27">
+                三重
+                <span class="sr-only" id="mie-desc">関西地方、人口約177万人</span>
+            </a>
+            <a href="#shiga-info" class="prefecture kansai" role="button" aria-describedby="shiga-desc" tabindex="25">
+                滋賀
+                <span class="sr-only" id="shiga-desc">関西地方、人口約141万人</span>
+            </a>
+            <a href="#kyoto-info" class="prefecture kansai" role="button" aria-describedby="kyoto-desc" tabindex="24">
+                京都
+                <span class="sr-only" id="kyoto-desc">関西地方、人口約256万人</span>
+            </a>
+            <a href="#osaka-info" class="prefecture kansai" role="button" aria-describedby="osaka-desc" tabindex="30">
+                大阪
+                <span class="sr-only" id="osaka-desc">関西地方、人口約880万人</span>
+            </a>
+            <a href="#hyogo-info" class="prefecture kansai" role="button" aria-describedby="hyogo-desc" tabindex="29">
+                兵庫
+                <span class="sr-only" id="hyogo-desc">関西地方、人口約545万人</span>
+            </a>
+            <a href="#nara-info" class="prefecture kansai" role="button" aria-describedby="nara-desc" tabindex="26">
+                奈良
+                <span class="sr-only" id="nara-desc">関西地方、人口約133万人</span>
+            </a>
+            <a href="#wakayama-info" class="prefecture kansai" role="button" aria-describedby="wakayama-desc"
+                tabindex="31">
+                和歌山
+                <span class="sr-only" id="wakayama-desc">関西地方、人口約93万人</span>
+            </a>
+            <a href="#tottori-info" class="prefecture chugoku" role="button" aria-describedby="tottori-desc"
+                tabindex="28">
+                鳥取
+                <span class="sr-only" id="tottori-desc">中国地方、人口約55万人</span>
+            </a>
+            <a href="#shimane-info" class="prefecture chugoku" role="button" aria-describedby="shimane-desc"
+                tabindex="32">
+                島根
+                <span class="sr-only" id="shimane-desc">中国地方、人口約67万人</span>
+            </a>
+            <a href="#okayama-info" class="prefecture chugoku" role="button" aria-describedby="okayama-desc"
+                tabindex="33">
+                岡山
+                <span class="sr-only" id="okayama-desc">中国地方、人口約189万人</span>
+            </a>
+            <a href="#hiroshima-info" class="prefecture chugoku" role="button" aria-describedby="hiroshima-desc"
+                tabindex="37">
+                広島
+                <span class="sr-only" id="hiroshima-desc">中国地方、人口約280万人</span>
+            </a>
+            <a href="#yamaguchi-info" class="prefecture chugoku" role="button" aria-describedby="yamaguchi-desc"
+                tabindex="36">
+                山口
+                <span class="sr-only" id="yamaguchi-desc">中国地方、人口約134万人</span>
+            </a>
+            <a href="#tokushima-info" class="prefecture shikoku" role="button" aria-describedby="tokushima-desc"
+                tabindex="35">
+                徳島
+                <span class="sr-only" id="tokushima-desc">四国地方、人口約73万人</span>
+            </a>
+            <a href="#kagawa-info" class="prefecture shikoku" role="button" aria-describedby="kagawa-desc"
+                tabindex="34">
+                香川
+                <span class="sr-only" id="kagawa-desc">四国地方、人口約95万人</span>
+            </a>
+            <a href="#ehime-info" class="prefecture shikoku" role="button" aria-describedby="ehime-desc" tabindex="38">
+                愛媛
+                <span class="sr-only" id="ehime-desc">四国地方、人口約133万人</span>
+            </a>
+            <a href="#kochi-info" class="prefecture shikoku" role="button" aria-describedby="kochi-desc" tabindex="39">
+                高知
+                <span class="sr-only" id="kochi-desc">四国地方、人口約69万人</span>
+            </a>
+            <a href="#fukuoka-info" class="prefecture kyushu" role="button" aria-describedby="fukuoka-desc"
+                tabindex="40">
+                福岡
+                <span class="sr-only" id="fukuoka-desc">九州地方、人口約512万人</span>
+            </a>
+            <a href="#saga-info" class="prefecture kyushu" role="button" aria-describedby="saga-desc" tabindex="45">
+                佐賀
+                <span class="sr-only" id="saga-desc">九州地方、人口約81万人</span>
+            </a>
+            <a href="#nagasaki-info" class="prefecture kyushu" role="button" aria-describedby="nagasaki-desc"
+                tabindex="44">
+                長崎
+                <span class="sr-only" id="nagasaki-desc">九州地方、人口約133万人</span>
+            </a>
+            <a href="#kumamoto-info" class="prefecture kyushu" role="button" aria-describedby="kumamoto-desc"
+                tabindex="46">
+                熊本
+                <span class="sr-only" id="kumamoto-desc">九州地方、人口約175万人</span>
+            </a>
+            <a href="#oita-info" class="prefecture kyushu" role="button" aria-describedby="oita-desc" tabindex="41">
+                大分
+                <span class="sr-only" id="oita-desc">九州地方、人口約113万人</span>
+            </a>
+            <a href="#miyazaki-info" class="prefecture kyushu" role="button" aria-describedby="miyazaki-desc"
+                tabindex="42">
+                宮崎
+                <span class="sr-only" id="miyazaki-desc">九州地方、人口約107万人</span>
+            </a>
+            <a href="#kagoshima-info" class="prefecture kyushu" role="button" aria-describedby="kagoshima-desc"
+                tabindex="43">
+                鹿児島
+                <span class="sr-only" id="kagoshima-desc">九州地方、人口約159万人</span>
+            </a>
+            <a href="#okinawa-info" class="prefecture okinawa" role="button" aria-describedby="okinawa-desc"
+                tabindex="47">
+                沖縄
+                <span class="sr-only" id="okinawa-desc">沖縄地方、人口約146万人</span>
+            </a>
+        </div>
+    </main>
+
+    <div class="info-panel" id="info-display" aria-live="polite">
+        <h3>都道府県情報</h3>
+        <p>都道府県を選択すると、詳細情報がここに表示されます。</p>
+    </div>
+
+    <script>
+        // アクセシビリティ対応のJavaScript
+        document.addEventListener('DOMContentLoaded', function () {
+            const prefectures = document.querySelectorAll('.prefecture');
+            const infoDisplay = document.getElementById('info-display');
+
+            // 都道府県情報データ（全47都道府県）
+            const prefectureData = {
+                '北海道': { region: '北海道地方', population: '約520万人', capital: '札幌市' },
+                '青森': { region: '東北地方', population: '約123万人', capital: '青森市' },
+                '岩手': { region: '東北地方', population: '約120万人', capital: '盛岡市' },
+                '宮城': { region: '東北地方', population: '約230万人', capital: '仙台市' },
+                '秋田': { region: '東北地方', population: '約95万人', capital: '秋田市' },
+                '山形': { region: '東北地方', population: '約107万人', capital: '山形市' },
+                '福島': { region: '東北地方', population: '約185万人', capital: '福島市' },
+                '茨城': { region: '関東地方', population: '約287万人', capital: '水戸市' },
+                '栃木': { region: '関東地方', population: '約194万人', capital: '宇都宮市' },
+                '群馬': { region: '関東地方', population: '約194万人', capital: '前橋市' },
+                '埼玉': { region: '関東地方', population: '約735万人', capital: 'さいたま市' },
+                '千葉': { region: '関東地方', population: '約628万人', capital: '千葉市' },
+                '東京': { region: '関東地方', population: '約1400万人', capital: '新宿区' },
+                '神奈川': { region: '関東地方', population: '約920万人', capital: '横浜市' },
+                '新潟': { region: '中部地方', population: '約220万人', capital: '新潟市' },
+                '富山': { region: '中部地方', population: '約104万人', capital: '富山市' },
+                '石川': { region: '中部地方', population: '約113万人', capital: '金沢市' },
+                '福井': { region: '中部地方', population: '約77万人', capital: '福井市' },
+                '山梨': { region: '中部地方', population: '約81万人', capital: '甲府市' },
+                '長野': { region: '中部地方', population: '約205万人', capital: '長野市' },
+                '岐阜': { region: '中部地方', population: '約198万人', capital: '岐阜市' },
+                '静岡': { region: '中部地方', population: '約363万人', capital: '静岡市' },
+                '愛知': { region: '中部地方', population: '約755万人', capital: '名古屋市' },
+                '三重': { region: '関西地方', population: '約177万人', capital: '津市' },
+                '滋賀': { region: '関西地方', population: '約141万人', capital: '大津市' },
+                '京都': { region: '関西地方', population: '約256万人', capital: '京都市' },
+                '大阪': { region: '関西地方', population: '約880万人', capital: '大阪市' },
+                '兵庫': { region: '関西地方', population: '約545万人', capital: '神戸市' },
+                '奈良': { region: '関西地方', population: '約133万人', capital: '奈良市' },
+                '和歌山': { region: '関西地方', population: '約93万人', capital: '和歌山市' },
+                '鳥取': { region: '中国地方', population: '約55万人', capital: '鳥取市' },
+                '島根': { region: '中国地方', population: '約67万人', capital: '松江市' },
+                '岡山': { region: '中国地方', population: '約189万人', capital: '岡山市' },
+                '広島': { region: '中国地方', population: '約280万人', capital: '広島市' },
+                '山口': { region: '中国地方', population: '約134万人', capital: '山口市' },
+                '徳島': { region: '四国地方', population: '約73万人', capital: '徳島市' },
+                '香川': { region: '四国地方', population: '約95万人', capital: '高松市' },
+                '愛媛': { region: '四国地方', population: '約133万人', capital: '松山市' },
+                '高知': { region: '四国地方', population: '約69万人', capital: '高知市' },
+                '福岡': { region: '九州地方', population: '約512万人', capital: '福岡市' },
+                '佐賀': { region: '九州地方', population: '約81万人', capital: '佐賀市' },
+                '長崎': { region: '九州地方', population: '約133万人', capital: '長崎市' },
+                '熊本': { region: '九州地方', population: '約175万人', capital: '熊本市' },
+                '大分': { region: '九州地方', population: '約113万人', capital: '大分市' },
+                '宮崎': { region: '九州地方', population: '約107万人', capital: '宮崎市' },
+                '鹿児島': { region: '九州地方', population: '約159万人', capital: '鹿児島市' },
+                '沖縄': { region: '沖縄地方', population: '約146万人', capital: '那覇市' }
+            };
+
+            prefectures.forEach(prefecture => {
+                // クリック/エンターキーでの選択処理
+                prefecture.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    selectPrefecture(this);
+                });
+
+                prefecture.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectPrefecture(this);
+                    }
+                });
+
+                // フォーカス時の情報表示
+                prefecture.addEventListener('focus', function () {
+                    // 最初のテキストノードのみを取得（スクリーンリーダー用テキストを除外）
+                    const name = this.childNodes[0].textContent.trim();
+                    const data = prefectureData[name];
+                    if (data) {
+                        infoDisplay.innerHTML = `
+                            <h3>${name}</h3>
+                            <p><strong>地方:</strong> ${data.region}</p>
+                            <p><strong>人口:</strong> ${data.population}</p>
+                            <p><strong>県庁所在地:</strong> ${data.capital}</p>
+                        `;
+                    }
+                });
+            });
+
+            function selectPrefecture(element) {
+                // 既存の選択を解除
+                prefectures.forEach(p => p.classList.remove('selected'));
+
+                // 新しい選択を追加
+                element.classList.add('selected');
+
+                // 情報パネルを更新（最初のテキストノードのみを取得）
+                const name = element.childNodes[0].textContent.trim();
+                const data = prefectureData[name] || { region: '情報なし', population: '情報なし', capital: '情報なし' };
+
+                infoDisplay.innerHTML = `
+                    <h3>${name} (選択中)</h3>
+                    <p><strong>地方:</strong> ${data.region}</p>
+                    <p><strong>人口:</strong> ${data.population}</p>
+                    <p><strong>県庁所在地:</strong> ${data.capital}</p>
+                `;
+
+                // スクリーンリーダーに選択を通知
+                element.setAttribute('aria-pressed', 'true');
+                prefectures.forEach(p => {
+                    if (p !== element) p.setAttribute('aria-pressed', 'false');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
