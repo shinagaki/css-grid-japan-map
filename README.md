@@ -113,5 +113,5 @@ MIT License
 ## 📞 お問い合わせ
 
 - GitHub Issues: [Issues](https://github.com/shinagaki/css-grid-japan-map/issues)
-- ブログ: [creco.net](https://creco.net)
+- ブログ: [creco.net](https://creco.net/css-grid-japan-map/)
 - Email: shinagaki@gmail.com
